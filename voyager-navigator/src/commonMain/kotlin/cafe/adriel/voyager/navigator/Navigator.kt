@@ -187,6 +187,12 @@ public class Navigator @InternalVoyagerApi constructor(
                 stateKeys -= key
             }
     }
+
+    @InternalVoyagerApi
+    public fun hasStateKey(key: String, screen: Screen): Boolean {
+        val stateKey = "${screen.key}:$key"
+        return stateKeys.contains(stateKey)
+    }
 }
 
 public data class NavigatorDisposeBehavior(

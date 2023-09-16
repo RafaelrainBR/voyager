@@ -7,10 +7,12 @@ import androidx.compose.animation.ContentTransform
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.core.screen.uniqueScreenKey
 import cafe.adriel.voyager.core.stack.StackEvent
 import cafe.adriel.voyager.navigator.Navigator
 
 public typealias ScreenTransitionContent = @Composable AnimatedVisibilityScope.(Screen) -> Unit
+private const val TransitionKey = "transition"
 
 @Composable
 public fun ScreenTransition(
@@ -45,8 +47,11 @@ public fun ScreenTransition(
         transitionSpec = transition,
         modifier = modifier
     ) { screen ->
-        navigator.saveableState("transition", screen) {
-            content(screen)
+        val key = "${TransitionKey}-${screen.uniqueScreenKey}"
+        if (!navigator.hasStateKey(key, screen)) {
+            navigator.saveableState(key, screen) {
+                content(screen)
+            }
         }
     }
 }
